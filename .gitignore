@@ -1,0 +1,64 @@
+# Flutter / Dart
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+.pub-cache
+.flutter/
+.flutter-plugins
+.metadata
+*.lock
+!pubspec.lock
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Android / iOS
+android/.gradle/
+android/local.properties
+android/key.properties
+*.keystore
+*.jks
+android/app/debug
+android/app/profile
+android/app/release
+android/app/generated
+android/captures/
+android/.cxx/
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+
+# Web
+web/
+
+# macOS
+.DS_Store
+
+# 临时文件
+*.log
+*.tmp
+*.bak
+
+# 编译产物
+*.apk
+*.aab
+*.ipa
+*.aar
+*.jar
+*.war
+*.zip
+
+# 测试
+coverage/
+.test_coverage.dart

@@ -1,0 +1,41 @@
+name: campus_auth_mobile
+description: 校园网自动认证 - 手机端
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # HTTP 请求
+  http: ^1.2.0
+  # 本地存储
+  shared_preferences: ^2.2.3
+  # WiFi 状态监听
+  connectivity_plus: ^6.0.3
+  # 后台任务
+  workmanager: ^0.5.2
+  # 本地通知
+  flutter_local_notifications: ^17.1.2
+  # HTML解析（提取Portal表单参数）
+  html: ^0.15.4
+  # URL解析
+  uri: ^1.0.0
+  # 状态管理
+  provider: ^6.1.2
+  # 图标
+  cupertino_icons: ^1.0.6
+  # 日志
+  logger: ^2.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
