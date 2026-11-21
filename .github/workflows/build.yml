@@ -1,9 +1,7 @@
-name: Android CI
+name: Build Android APK
 
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
     branches: [ main, master ]
   workflow_dispatch:
 
@@ -12,52 +10,44 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout代码
+    - name: 拉取代码
       uses: actions/checkout@v4
     
-    - name: 设置Java环境
+    - name: 配置Java 17
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
         java-version: '17'
-        cache: 'gradle'
     
-    - name: 设置Flutter环境
+    - name: 安装Flutter 3.24.0
       uses: subosito/flutter-action@v2
       with:
         flutter-version: '3.24.0'
         channel: 'stable'
         cache: true
     
+    - name: 写入local.properties
+      run: |
+        echo "flutter.sdk=$FLUTTER_ROOT" > android/local.properties
+        echo "sdk.dir=$ANDROID_SDK_ROOT" >> android/local.properties
+    
+    - name: 生成缺失的平台文件（Gradle Wrapper等）
+      run: |
+        # flutter create --platforms android 会合并补全缺失文件，不覆盖已有文件
+        flutter create --platforms android --org com.campusauth --project-name campus_auth_mobile . || true
+        # 确保local.properties有正确路径（flutter create 可能覆盖）
+        echo "flutter.sdk=$FLUTTER_ROOT" > android/local.properties
+        echo "sdk.dir=$ANDROID_SDK_ROOT" >> android/local.properties
+    
     - name: 获取依赖
       run: flutter pub get
     
-    - name: 构建APK
-      run: flutter build apk --release
+    - name: 编译APK（release）
+      run: flutter build apk --release --no-tree-shake-icons
     
     - name: 上传APK
       uses: actions/upload-artifact@v4
       with:
-        name: campus-auth-release
+        name: campus-auth-v1.0-release
         path: build/app/outputs/flutter-apk/app-release.apk
         retention-days: 30
-    
-    - name: 创建Release（如果是tag）
-      if: startsWith(github.ref, 'refs/tags/')
-      uses: softprops/action-gh-release@v1
-      with:
-        files: build/app/outputs/flutter-apk/app-release.apk
-        body: |
-          ## 校园网自动认证 - Android版
-          
-          ### 安装说明
-          1. 下载 `app-release.apk`
-          2. 允许"未知来源"安装
-          3. 打开APP填写账号密码
-          4. 开启自动登录
-          
-          ### 功能特性
-          - ✅ 自动检测Portal并登录
-          - ✅ WiFi状态监听
-          - ✅ 后台保活
-          - ✅ 支持VBRAS/锐捷/深澜/Dr.COM
